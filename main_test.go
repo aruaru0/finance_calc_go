@@ -16,7 +16,7 @@ func TestCalculateFinancialRate(t *testing.T) {
 	}{
 		{
 			name:      "Future Value Factor",
-			op:        "Future Value Factor",
+			op:        FutureValueFactor,
 			r:         0.05,
 			n:         10,
 			expected:  math.Pow(1+0.05, 10),
@@ -24,7 +24,7 @@ func TestCalculateFinancialRate(t *testing.T) {
 		},
 		{
 			name:      "Present Value Factor",
-			op:        "Present Value Factor",
+			op:        PresentValueFactor,
 			r:         0.05,
 			n:         10,
 			expected:  math.Pow(1+0.05, -10),
@@ -32,7 +32,7 @@ func TestCalculateFinancialRate(t *testing.T) {
 		},
 		{
 			name:      "Future Value of Annuity Factor",
-			op:        "Future Value of Annuity Factor",
+			op:        FutureValueOfAnnuityFactor,
 			r:         0.05,
 			n:         10,
 			expected:  (math.Pow(1+0.05, 10) - 1) / 0.05,
@@ -40,7 +40,7 @@ func TestCalculateFinancialRate(t *testing.T) {
 		},
 		{
 			name:      "Present Value of Annuity Factor",
-			op:        "Present Value of Annuity Factor",
+			op:        PresentValueOfAnnuityFactor,
 			r:         0.05,
 			n:         10,
 			expected:  (1 - math.Pow(1+0.05, -10)) / 0.05,
@@ -48,7 +48,7 @@ func TestCalculateFinancialRate(t *testing.T) {
 		},
 		{
 			name:      "Sinking Fund Factor",
-			op:        "Sinking Fund Factor",
+			op:        SinkingFundFactor,
 			r:         0.05,
 			n:         10,
 			expected:  0.05 / (math.Pow(1+0.05, 10) - 1),
@@ -56,7 +56,7 @@ func TestCalculateFinancialRate(t *testing.T) {
 		},
 		{
 			name:      "Capital Recovery Factor",
-			op:        "Capital Recovery Factor",
+			op:        CapitalRecoveryFactor,
 			r:         0.05,
 			n:         10,
 			expected:  (0.05 * math.Pow(1+0.05, 10)) / (math.Pow(1+0.05, 10) - 1),
