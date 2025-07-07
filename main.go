@@ -44,7 +44,7 @@ func main() {
 	)
 
 	// Add tool handler
-	s.AddTool(calculatorTool, helloHandler)
+	s.AddTool(calculatorTool, financeHandler)
 
 	// Start the stdio server
 	if err := server.ServeStdio(s); err != nil {
@@ -52,13 +52,7 @@ func main() {
 	}
 }
 
-func helloHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// name, err := request.RequireString("name")
-	// if err != nil {
-	// 	return mcp.NewToolResultError(err.Error()), nil
-	// }
-
-	// return mcp.NewToolResultText(fmt.Sprintf("Hello, %s!", name)), nil
+func financeHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	op, ok := request.GetArguments()["operation"].(string)
 	if !ok {
 		return nil, fmt.Errorf("missing operation")
