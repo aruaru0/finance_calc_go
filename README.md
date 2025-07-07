@@ -9,13 +9,16 @@ Performs financial calculations.
 ### Parameters:
 
 - `operation` (string, required):
-  The calculations to perform:
-  - `Future Value Factor`: Calculates the future value of a present sum after a period of compound interest.
-  - `Present Value Factor`: Calculates the present value of a future sum.
-  - `Future Value of Annuity Factor`: Calculates the future value of a series of equal payments (annuity).
-  - `Present Value of Annuity Factor`: Calculates the present value of a series of equal payments (annuity).
-  - `Sinking Fund Factor`: Calculates the annual deposit required to reach a specific future sum.
-  - `Capital Recovery Factor`: Calculates the payment required to recover an initial investment.
-- `r` (number, required): Interest rate (0.0 ~ 1.0).
-- `n` (number, required): Number of periods (years).
-- `amount` (number, required): The amount for calculation.
+  The financial operation to perform. Must be one of:
+  - "FVIF": Future value of a present lump sum
+  - "PVIF": Present value of a future lump sum
+  - "FVAIF": Future value of periodic savings
+  - "PVAIF": Present value of periodic payments
+  - "SFF": Required periodic savings to reach a future goal
+  - "CRF": Fixed periodic payment to repay a loan or deplete a fund
+- `r` (number, required): The annual interest rate as a decimal (e.g., 0.05 for 5%)
+- `n` (number, required): The number of periods (typically years) for the calculation.
+- `amount` (number, required):
+  The monetary value used in the calculation:
+  - For "FVIF" and "PVIF": a single lump-sum amount
+  - For "FVAIF", "PVAIF", "SFF", and "CRF": a periodic (e.g. annual) amount

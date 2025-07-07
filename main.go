@@ -10,13 +10,19 @@ import (
 )
 
 // Define constants for financial calculation types
+// "FVIF": Future value of a present lump sum
+// "PVIF": Present value of a future lump sum
+// "FVAIF": Future value of periodic savings
+// "PVAIF": Present value of periodic payments
+// "SFF": Required periodic savings to reach a future goal
+// "CRF": Fixed periodic payment to repay a loan or deplete a fund
 const (
-	FutureValueFactor           = "Future Value Factor"
-	PresentValueFactor          = "Present Value Factor"
-	FutureValueOfAnnuityFactor  = "Future Value of Annuity Factor"
-	PresentValueOfAnnuityFactor = "Present Value of Annuity Factor"
-	SinkingFundFactor           = "Sinking Fund Factor"
-	CapitalRecoveryFactor       = "Capital Recovery Factor"
+	FutureValueFactor           = "FVIF"
+	PresentValueFactor          = "PVIF"
+	FutureValueOfAnnuityFactor  = "FVAIF"
+	PresentValueOfAnnuityFactor = "PVAIF"
+	SinkingFundFactor           = "SFF"
+	CapitalRecoveryFactor       = "CRF"
 )
 
 // Define a slice of available financial calculation operations
@@ -30,16 +36,6 @@ var financialOperations = []string{
 }
 
 // main is the entry point for the Finance Calculator MCP server.
-//
-// The Finance Calculator performs the following financial calculations:
-// 1. Future Value Factor: Calculates the future value of a present sum after a period of compound interest.
-// 2. Present Value Factor: Calculates the present value of a future sum.
-// 3. Future Value of Annuity Factor: Calculates the future value of a series of equal payments (annuity).
-// 4. Present Value of Annuity Factor: Calculates the present value of a series of equal payments (annuity).
-// 5. Sinking Fund Factor: Calculates the annual deposit required to reach a specific future sum.
-// 6. Capital Recovery Factor: Calculates the payment required to recover an initial investment.
-//
-// The server is started with standard input/output.
 func main() {
 	// Create a new MCP server
 	s := server.NewMCPServer(
@@ -51,29 +47,36 @@ func main() {
 
 	// Define the interface for the financial calculator tool
 	calculatorTool := mcp.NewTool("financial_calculator",
-		mcp.WithDescription("Performs financial calculations."),
+		mcp.WithDescription(`This tool performs time value of money calculations using six standard financial planning operations.
+The financial operation to perform. Must be one of: FVIF, PVIF, FVAIF, PVAIF, SFF, CRF.
+
+It helps estimate future values, present values, loan repayments, and savings requirements based on interest rate, time period, and amount.
+		`),
 		mcp.WithString("operation",
 			mcp.Required(),
-			mcp.Description(`The financial calculation to perform. Select one of the following:
-- Future Value Factor: Calculates the future value of a present sum after a period of compound interest.
-- Present Value Factor: Calculates the present value of a future sum.
-- Future Value of Annuity Factor: Calculates the future value of a series of equal payments (annuity).
-- Present Value of Annuity Factor: Calculates the present value of a series of equal payments (annuity).
-- Sinking Fund Factor: Calculates the annual deposit required to reach a specific future sum.
-- Capital Recovery Factor: Calculates the payment required to recover an initial investment.`),
+			mcp.Description(`The financial operation to perform. Must be one of:
+- FVIF : Future value of a present lump sum
+- PVIF : Present value of a future lump sum
+- FVAIF : Future value of periodic savings
+- PVAIF : Present value of periodic payments
+- SFF : Required periodic savings to reach a future goal
+- CRF : Fixed periodic payment to repay a loan or deplete a fund
+			`),
 			mcp.Enum(financialOperations...),
 		),
 		mcp.WithNumber("r",
 			mcp.Required(),
-			mcp.Description("interest rate(0.0 ~ 1.0)"),
+			mcp.Description("The annual interest rate as a decimal (e.g., 0.05 for 5%)"),
 		),
 		mcp.WithNumber("n",
 			mcp.Required(),
-			mcp.Description("number of periods(years)"),
+			mcp.Description("The number of periods (typically years) for the calculation."),
 		),
 		mcp.WithNumber("amount",
 			mcp.Required(),
-			mcp.Description("amount"),
+			mcp.Description(`The monetary value used in the calculation:
+- For "FVIF" and "PVIF": a single lump-sum amount
+- For "FVAIF", "PVAIF", "SFF", and "CRF": a periodic (e.g. annual) amount`),
 		),
 	)
 
